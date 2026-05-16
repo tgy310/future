@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { Bell, Menu, ShoppingCart, X } from "lucide-react";
 
@@ -181,6 +182,16 @@ export function MenuClient({ categories }: MenuClientProps) {
           </h1>
 
           <div className="flex items-center gap-1">
+            <Link href="/staff/orders">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 px-2 text-xs font-bold text-orange-700"
+              >
+                注文確認
+              </Button>
+            </Link>
+
             <Button
               variant="ghost"
               size="icon"
