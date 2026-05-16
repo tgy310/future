@@ -1,4 +1,13 @@
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 export default function Home() {
   return (
@@ -17,6 +26,13 @@ export default function Home() {
             To get started, edit the page.tsx file.
             tgtg
           </h1>
+          <Button>注文を開始</Button>
+          <Card>
+            <CardHeader>見出し</CardHeader>
+            <CardDescription>説明</CardDescription>
+            <CardContent>content</CardContent>
+            <CardTitle>title</CardTitle>
+          </Card>
           <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
             Looking for a starting point or more instructions? Head over to{" "}
             <a
