@@ -187,16 +187,6 @@ export default function Home() {
 
       {/* コンテンツ */}
       <div className="mx-auto max-w-[390px] px-4 pb-24 pt-4">
-        <section className="mb-5 rounded-2xl bg-zinc-900 p-5 text-white">
-          <p className="text-sm text-zinc-300">スマホ注文システム</p>
-          <h2 className="mt-1 text-2xl font-bold leading-snug">
-            お席からかんたん注文
-          </h2>
-          <p className="mt-2 text-sm leading-6 text-zinc-300">
-            メニューを選んで追加し、注文リストから内容を確認できます。
-          </p>
-        </section>
-
         <div className="space-y-7">
           {categories.map((category) => (
             <section
