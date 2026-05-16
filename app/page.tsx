@@ -264,15 +264,6 @@ export default function Home() {
           ))}
         </div>
       </div>
-
-      {/* 下部固定ボタン */}
-      <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-orange-200 bg-white p-3">
-        <div className="mx-auto max-w-[390px] px-1">
-          <Button className="h-12 w-full bg-orange-500 text-base font-bold text-white hover:bg-orange-600">
-            注文リストを見る
-          </Button>
-        </div>
-      </div>
     </main>
   );
 }
