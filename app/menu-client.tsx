@@ -41,6 +41,10 @@ const calculateSplitPrice = (totalPrice: number, splitCount: number) => {
   return Math.ceil(totalPrice / splitCount);
 };
 
+// プロトタイプ用の固定席番号
+// 実運用ではQRコードのURLパラメータなどから取得する想定
+const FIXED_SEAT_NUMBER = "1";
+
 export function MenuClient({ categories }: MenuClientProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isOrderListOpen, setIsOrderListOpen] = useState(false);
@@ -117,8 +121,8 @@ export function MenuClient({ categories }: MenuClientProps) {
 
   const handleSubmitOrder = async () => {
     if (orderItems.length === 0) {
-        setErrorMessage("注文リストに商品がありません。");
-        return;
+      setErrorMessage("注文リストに商品がありません。");
+      return;
     }
 
     setIsSubmitting(true);
@@ -126,33 +130,34 @@ export function MenuClient({ categories }: MenuClientProps) {
     setSuccessMessage("");
 
     try {
-        const response = await fetch("/api/orders", {
+      const response = await fetch("/api/orders", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            items: orderItems,
+          seatNumber: FIXED_SEAT_NUMBER,
+          items: orderItems,
         }),
-        });
+      });
 
-        const result = await response.json();
+      const result = await response.json();
 
-        if (!response.ok) {
+      if (!response.ok) {
         throw new Error(result.message ?? "注文の送信に失敗しました。");
-        }
+      }
 
-        setSuccessMessage("注文を受け付けました。");
-        setOrderItems([]);
-        setIsOrderListOpen(false);
+      setSuccessMessage("注文を受け付けました。");
+      setOrderItems([]);
+      setIsOrderListOpen(false);
     } catch (error) {
-        setErrorMessage(
+      setErrorMessage(
         error instanceof Error
-            ? error.message
-            : "注文の送信に失敗しました。"
-        );
+          ? error.message
+          : "注文の送信に失敗しました。"
+      );
     } finally {
-        setIsSubmitting(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -222,11 +227,12 @@ export function MenuClient({ categories }: MenuClientProps) {
         </div>
       )}
 
+      {/* 成功メッセージ */}
       {successMessage && (
         <div className="fixed left-0 right-0 top-16 z-40 mx-auto max-w-[390px] px-4">
-            <div className="rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-700 shadow-sm">
+          <div className="rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-700 shadow-sm">
             {successMessage}
-            </div>
+          </div>
         </div>
       )}
 
