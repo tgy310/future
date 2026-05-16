@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { sql } from "@/lib/db";
 
 export type MenuCategory = {
@@ -40,19 +41,22 @@ type MenuItemRow = {
   display_order: number;
 };
 
-export async function getMenuCategoriesWithItems(): Promise<
+async function fetchMenuCategoriesWithItems(): Promise<
   MenuCategoryWithItems[]
 > {
-  const categoryRows = await sql<MenuCategoryRow[]>`
+  console.count("fetchMenuCategoriesWithItems called");
+
+  const categoryRows = (await sql`
     SELECT
       id,
       label,
       display_order
     FROM menu_categories
-    ORDER BY display_order ASC;
-  `;
+    ORDER BY display_order ASC
+    LIMIT 20;
+  `) as MenuCategoryRow[];
 
-  const itemRows = await sql<MenuItemRow[]>`
+  const itemRows = (await sql`
     SELECT
       id,
       name,
@@ -64,8 +68,9 @@ export async function getMenuCategoriesWithItems(): Promise<
       is_recommended,
       display_order
     FROM menu_items
-    ORDER BY category_id ASC, display_order ASC;
-  `;
+    ORDER BY category_id ASC, display_order ASC
+    LIMIT 100;
+  `) as MenuItemRow[];
 
   const categories: MenuCategory[] = categoryRows.map((category) => ({
     id: category.id,
@@ -87,8 +92,14 @@ export async function getMenuCategoriesWithItems(): Promise<
 
   return categories.map((category) => ({
     ...category,
-    items: items
-      .filter((item) => item.categoryId === category.id)
-      .sort((a, b) => a.displayOrder - b.displayOrder),
+    items: items.filter((item) => item.categoryId === category.id),
   }));
 }
+
+export const getMenuCategoriesWithItems = unstable_cache(
+  fetchMenuCategoriesWithItems,
+  ["menu-categories-with-items"],
+  {
+    revalidate: 60,
+  }
+);
