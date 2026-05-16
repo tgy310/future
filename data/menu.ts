@@ -47,7 +47,7 @@ export const menuItems: MenuItem[] = [
     categoryId: "recommend",
     description:
       "店長おすすめの一品です。内容が気になる方はスタッフまでお尋ねください。",
-    isSoldOut: false,
+    isSoldOut: true,
     isRecommended: true,
     displayOrder: 1,
   },
