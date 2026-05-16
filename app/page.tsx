@@ -1,29 +1,40 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { Bell, Menu, ShoppingCart, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const categories = [
+type MenuItem = {
+  name: string;
+  price: number;
+  description?: string;
+  image?: string;
+};
+
+type Category = {
+  id: string;
+  label: string;
+  items: MenuItem[];
+};
+
+const categories: Category[] = [
   {
     id: "recommend",
     label: "おすすめ",
     items: [
       {
         name: "本日のおすすめ",
-        description: "季節の食材を使った人気メニューです。",
+        price: 750,
+        description:
+          "店長おすすめの一品です。内容が気になる方はスタッフまでお尋ねください。",
       },
       {
-        name: "OSAKI 亭セット",
-        description: "初めての方におすすめの定番セットです。",
+        name: "おつまみ3点セット",
+        price: 500,
+        image: "/menu/3ten.png",
       },
     ],
   },
@@ -32,12 +43,14 @@ const categories = [
     label: "メイン",
     items: [
       {
-        name: "定食メニュー",
-        description: "ご飯・味噌汁付きの満足メニューです。",
+        name: "鶏のから揚げ",
+        price: 600,
+        image: "/menu/kara.png",
       },
       {
-        name: "丼メニュー",
-        description: "手軽に食べられる人気の一品です。",
+        name: "焼き餃子",
+        price: 500,
+        image: "/menu/gyo.png",
       },
     ],
   },
@@ -46,12 +59,14 @@ const categories = [
     label: "サイド",
     items: [
       {
-        name: "揚げ物",
-        description: "シェアしやすいサイドメニューです。",
+        name: "だし巻き卵",
+        price: 400,
+        image: "/menu/dasi.png",
       },
       {
-        name: "サラダ",
-        description: "食事に合わせやすい軽めの一品です。",
+        name: "磯部揚げ",
+        price: 400,
+        image: "/menu/iso.png",
       },
     ],
   },
@@ -60,26 +75,14 @@ const categories = [
     label: "ドリンク",
     items: [
       {
-        name: "ソフトドリンク",
-        description: "お食事と一緒にどうぞ。",
+        name: "生ビール",
+        price: 500,
+        image: "/menu/nama.png",
       },
       {
-        name: "温かい飲み物",
-        description: "食後にもおすすめです。",
-      },
-    ],
-  },
-  {
-    id: "dessert",
-    label: "デザート",
-    items: [
-      {
-        name: "本日の甘味",
-        description: "食後に楽しめるデザートです。",
-      },
-      {
-        name: "アイス",
-        description: "さっぱりした定番デザートです。",
+        name: "ジャスミンハイ",
+        price: 350,
+        image: "/menu/jj.png",
       },
     ],
   },
@@ -97,29 +100,40 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-dvh bg-zinc-50">
+    <main className="min-h-dvh bg-orange-50">
       {/* ヘッダー */}
-      <header className="sticky top-0 z-30 border-b bg-white">
+      <header className="sticky top-0 z-30 border-b border-orange-200 bg-white/95 backdrop-blur">
         <div className="mx-auto flex h-12 max-w-[390px] items-center justify-between px-4">
           <Button
             variant="ghost"
             size="icon"
             aria-label="カテゴリメニューを開く"
             onClick={() => setIsSidebarOpen(true)}
+            className="text-zinc-900"
           >
             <Menu className="h-5 w-5" />
           </Button>
 
-          <h1 className="text-base font-bold tracking-wide text-zinc-900">
+          <h1 className="text-base font-bold tracking-wide text-zinc-950">
             OSAKI 亭
           </h1>
 
           <div className="flex items-center gap-1">
-            <Button variant="ghost" size="icon" aria-label="従業員を呼ぶ">
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="従業員を呼ぶ"
+              className="text-zinc-900"
+            >
               <Bell className="h-5 w-5" />
             </Button>
 
-            <Button variant="ghost" size="icon" aria-label="注文リストを見る">
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="注文リストを見る"
+              className="text-zinc-900"
+            >
               <ShoppingCart className="h-5 w-5" />
             </Button>
           </div>
@@ -132,7 +146,7 @@ export default function Home() {
               key={category.id}
               variant="outline"
               size="sm"
-              className="h-9 shrink-0 rounded-full px-4"
+              className="h-9 shrink-0 rounded-full border-orange-300 bg-orange-50 px-4 text-zinc-900 hover:bg-orange-100"
               onClick={() => scrollToCategory(category.id)}
             >
               {category.label}
@@ -150,10 +164,10 @@ export default function Home() {
             onClick={() => setIsSidebarOpen(false)}
           />
 
-          <aside className="relative h-full w-72 bg-white p-4 shadow-xl">
+          <aside className="relative h-full w-72 bg-orange-50 p-4 shadow-xl">
             <div className="mb-6 flex items-center justify-between">
               <div>
-                <p className="text-sm text-zinc-500">カテゴリ</p>
+                <p className="text-sm text-orange-700">カテゴリ</p>
                 <h2 className="text-lg font-bold text-zinc-900">
                   メニュー一覧
                 </h2>
@@ -174,7 +188,7 @@ export default function Home() {
                 <Button
                   key={category.id}
                   variant="ghost"
-                  className="w-full justify-start text-base"
+                  className="w-full justify-start rounded-xl text-base hover:bg-orange-100"
                   onClick={() => scrollToCategory(category.id)}
                 >
                   {category.label}
@@ -195,8 +209,8 @@ export default function Home() {
               className="scroll-mt-28"
             >
               <div className="mb-3">
-                <p className="text-xs font-medium text-zinc-500">Category</p>
-                <h2 className="text-xl font-bold text-zinc-900">
+                <p className="text-xs font-medium text-orange-700">Category</p>
+                <h2 className="text-xl font-bold text-zinc-950">
                   {category.label}
                 </h2>
               </div>
@@ -205,19 +219,43 @@ export default function Home() {
                 {category.items.map((item) => (
                   <Card
                     key={item.name}
-                    className="flex min-h-40 flex-col justify-between rounded-2xl shadow-sm"
+                    className="overflow-hidden rounded-2xl border-orange-100 bg-white shadow-sm"
                   >
-                    <CardHeader className="p-4 pb-2">
-                      <CardTitle className="text-base leading-6">
+                    {item.image ? (
+                      <div className="relative aspect-[5/4] w-full bg-orange-100">
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          fill
+                          sizes="180px"
+                          className="object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div className="flex aspect-[5/4] w-full items-center justify-center bg-gradient-to-br from-orange-500 to-amber-600 p-3 text-center text-white">
+                        <div>
+                          <p className="text-xs opacity-90">店長おすすめ</p>
+                          <p className="mt-1 text-sm font-bold leading-5">
+                            詳細はスタッフまで
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    <CardHeader className="px-3 pb-1 pt-2">
+                      <CardTitle className="line-clamp-2 text-sm font-bold leading-5">
                         {item.name}
                       </CardTitle>
-                      <CardDescription className="line-clamp-3 text-xs leading-5">
-                        {item.description}
-                      </CardDescription>
                     </CardHeader>
 
-                    <CardContent className="p-4 pt-0">
-                      <Button className="h-10 w-full">追加</Button>
+                    <CardContent className="space-y-1.5 px-3 pb-2 pt-0">
+                      <p className="text-sm font-bold leading-none text-zinc-950">
+                        ¥{item.price.toLocaleString()}
+                      </p>
+
+                      <Button className="h-8 w-full bg-orange-500 text-sm font-bold text-white hover:bg-orange-600">
+                        追加
+                      </Button>
                     </CardContent>
                   </Card>
                 ))}
@@ -228,9 +266,11 @@ export default function Home() {
       </div>
 
       {/* 下部固定ボタン */}
-      <div className="fixed bottom-0 left-0 right-0 z-30 border-t bg-white p-3">
+      <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-orange-200 bg-white p-3">
         <div className="mx-auto max-w-[390px] px-1">
-          <Button className="h-12 w-full text-base">注文リストを見る</Button>
+          <Button className="h-12 w-full bg-orange-500 text-base font-bold text-white hover:bg-orange-600">
+            注文リストを見る
+          </Button>
         </div>
       </div>
     </main>
